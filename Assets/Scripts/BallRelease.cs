@@ -12,6 +12,6 @@ public class BallRelease : MonoBehaviour
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        _rigidbody.AddForce(_ballSpeed * Vector2.down, ForceMode2D.Impulse);
+        _rigidbody.AddForce(_ballSpeed * Vector2.down, ForceMode2D.Force);
     }
 }
