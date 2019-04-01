@@ -4,11 +4,6 @@ using UnityEngine.EventSystems;
 
 public class SwipeInput : MonoBehaviour, IDragHandler, IBeginDragHandler
 {
-    void Start()
-    {
-
-    }
-
     public void OnBeginDrag(PointerEventData eventData)
     {
 

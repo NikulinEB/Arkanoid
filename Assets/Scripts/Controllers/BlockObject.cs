@@ -4,6 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(Collider2D))]
 public class BlockObject : MonoBehaviour
 {
+    private Block _blockType;
     private int _hitCount;
     public int HitCount {
         get
@@ -15,6 +16,7 @@ public class BlockObject : MonoBehaviour
             if (value == 0)
             {
                 Destroy(gameObject);
+                Events.BlockDestroyed_Call(_blockType);
             }
             else
             {
@@ -39,6 +41,7 @@ public class BlockObject : MonoBehaviour
 
     public void SetBlock(Block block)
     {
+        _blockType = block;
         _renderer.sprite = block.Sprite;
         HitCount = block.HitCount;
     }

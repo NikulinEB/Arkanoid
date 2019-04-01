@@ -3,7 +3,8 @@ using System.Collections;
 
 public class ShowMenuButton : MonoBehaviour
 {
-    public MenuType menuType;
+    [SerializeField]
+    protected MenuType menuType;
 
     public virtual void ShowMenu() {
         Events.ShowMenu_Call(menuType);

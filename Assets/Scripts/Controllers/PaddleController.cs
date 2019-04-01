@@ -12,11 +12,15 @@ public class PaddleController : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         Events.Swipe += Shift;
+        Events.StartLevel += StopShifting;
+        Events.StartLevel += ResetPosition;
     }
 
     private void OnDestroy()
     {
         Events.Swipe -= Shift;
+        Events.StartLevel -= StopShifting;
+        Events.StartLevel -= ResetPosition;
     }
 
     private void Shift(float force)
@@ -27,5 +31,10 @@ public class PaddleController : MonoBehaviour
     private void StopShifting()
     {
         _rigidbody.velocity = new Vector2(0, 0);
+    }
+
+    private void ResetPosition()
+    {
+        transform.position = Vector3.zero;
     }
 }
