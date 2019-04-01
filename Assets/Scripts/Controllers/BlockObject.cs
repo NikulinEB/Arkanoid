@@ -25,6 +25,7 @@ public class BlockObject : MonoBehaviour
         }
     }
     private SpriteRenderer _renderer;
+    private BlocksController _blocksController;
 
     private void OnEnable()
     {
@@ -36,7 +37,13 @@ public class BlockObject : MonoBehaviour
         if (collision.transform.tag.Equals("Ball"))
         {
             HitCount--;
+            TryChangeColor();
         }
+    }
+
+    public void SetController(BlocksController blocksController)
+    {
+        _blocksController = blocksController;
     }
 
     public void SetBlock(Block block)
@@ -49,5 +56,13 @@ public class BlockObject : MonoBehaviour
     public void Move(Vector3 delta)
     {
         transform.Translate(delta);
+    }
+
+    public void TryChangeColor()
+    {
+        if (_blocksController.BlockTypes.ContainsKey(HitCount))
+        {
+            SetBlock(_blocksController.BlockTypes[HitCount]);
+        }
     }
 }

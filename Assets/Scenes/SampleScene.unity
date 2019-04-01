@@ -978,16 +978,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pointsForHit: 3
-  _startPosition: {x: -2, y: 6, z: 0}
-  _blocksInterval: 0.2
+  _startPosition: {x: -1.96, y: 6.8, z: 0}
+  _blocksInterval: 0.03
   _blocks:
   - {fileID: 11400000, guid: 183faf0d722d65a4693fbd5af5fe7126, type: 2}
   - {fileID: 11400000, guid: aca7467035a50aa48b11efd9f51646a7, type: 2}
-  - {fileID: 11400000, guid: b1498c229da64f9478e1b3542be7738d, type: 2}
   - {fileID: 11400000, guid: f0f6adf9ad6f34f49baadcd3c1bb7dcd, type: 2}
   - {fileID: 11400000, guid: fa553ba9f763fb342b1652082219a195, type: 2}
   - {fileID: 11400000, guid: f184a1b844d51cf4d8f35db46da8caea, type: 2}
+  _columnsCount: 7
   _secondsBeforeLowering: 10
+  _baseBlockMin: 1.06
+  _baseBlockMax: 1.2
+  _levelNumber: 1
 --- !u!4 &1662245612
 Transform:
   m_ObjectHideFlags: 0
@@ -996,7 +999,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1662245610}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 6.01, z: 0}
+  m_LocalPosition: {x: -1.96, y: 6.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
