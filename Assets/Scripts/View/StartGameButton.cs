@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StartLevelButton : ShowMenuButton
+public class StartGameButton : ShowMenuButton
 {
     public override void ShowMenu()
     {
-        Events.StartLevel_Call();
+        Events.StartGame_Call();
         base.ShowMenu();
     }
 }

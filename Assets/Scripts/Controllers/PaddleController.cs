@@ -12,15 +12,19 @@ public class PaddleController : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         Events.Swipe += Shift;
-        Events.StartLevel += StopShifting;
-        Events.StartLevel += ResetPosition;
+        Events.StartGame += StopShifting;
+        Events.StartGame += ResetPosition;
+        Events.NextLevel += StopShifting;
+        Events.NextLevel += ResetPosition;
     }
 
     private void OnDestroy()
     {
         Events.Swipe -= Shift;
-        Events.StartLevel -= StopShifting;
-        Events.StartLevel -= ResetPosition;
+        Events.StartGame -= StopShifting;
+        Events.StartGame -= ResetPosition;
+        Events.NextLevel -= StopShifting;
+        Events.NextLevel -= ResetPosition;
     }
 
     private void Shift(float force)

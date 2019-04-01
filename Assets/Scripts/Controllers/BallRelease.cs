@@ -14,14 +14,18 @@ public class BallRelease : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _startPosition = transform.position;
-        Events.StartLevel += ResetPosition;
-        Events.StartLevel += ReleaseBall;
+        Events.StartGame += ResetPosition;
+        Events.StartGame += ReleaseBall;
+        Events.NextLevel += ResetPosition;
+        Events.NextLevel += ReleaseBall;
     }
 
     private void OnDestroy()
     {
-        Events.StartLevel -= ResetPosition;
-        Events.StartLevel -= ReleaseBall;
+        Events.StartGame -= ResetPosition;
+        Events.StartGame -= ReleaseBall;
+        Events.NextLevel -= ResetPosition;
+        Events.NextLevel -= ReleaseBall;
     }
 
     private void ResetPosition()

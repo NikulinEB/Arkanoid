@@ -6,7 +6,19 @@ using System.Linq;
 
 public class BlocksController : MonoBehaviour
 {
-    public int Score { get; private set; }
+    private int _score;
+    public int Score {
+        get
+        {
+            return _score;
+        }
+        private set
+        {
+            _score = value;
+            Events.ScoreChanged_Call(_score);
+        }
+    }
+    public Dictionary<int, Block> BlockTypes { get; private set; } = new Dictionary<int, Block>();
     [SerializeField]
     private int _pointsForHit;
     [SerializeField]
@@ -22,7 +34,6 @@ public class BlocksController : MonoBehaviour
     private int _columnsCount = 8;
     [SerializeField]
     private float _secondsBeforeLowering;
-    public Dictionary<int, Block> BlockTypes { get; private set; } = new Dictionary<int, Block>();
     private Coroutine _loweringTimer;
     [SerializeField]
     private float _baseBlockMin = 1.06f;
@@ -30,6 +41,7 @@ public class BlocksController : MonoBehaviour
     private float _baseBlockMax = 1.2f;
     [SerializeField]
     private int _levelNumber = 1;
+    private int _blockCounter;
 
     private void Start()
     {
@@ -37,21 +49,29 @@ public class BlocksController : MonoBehaviour
         LoadPrefab();
         Events.BlockDestroyed += BlockDestroyed;
         Events.GameOver += GameOver;
-        Events.StartLevel += StartLevel;
+        Events.StartGame += StartGame;
+        Events.NextLevel += NextLevel;
     }
 
     private void OnDestroy()
     {
         Events.BlockDestroyed -= BlockDestroyed;
         Events.GameOver -= GameOver;
-        Events.StartLevel -= StartLevel;
+        Events.StartGame -= StartGame;
+        Events.NextLevel -= NextLevel;
     }
 
-    private void StartLevel()
+    private void NextLevel()
     {
-        RemoveBlocks();
+        StopTimer();
         CreateLevel(_levelNumber);
         _loweringTimer = StartCoroutine(LoweringTimer(_secondsBeforeLowering));
+    }
+
+    private void StartGame()
+    {
+        ClearGameState();
+        NextLevel();
     }
 
     private void FillBlocksDict(Block[] blocks)
@@ -87,6 +107,7 @@ public class BlocksController : MonoBehaviour
 
     private void CreateLevel(int levelNumber)
     {
+        _blockCounter = 0;
         var rows = Mathf.Clamp(levelNumber + 1, 1, 10);
         var minBlock = Mathf.Clamp(Mathf.RoundToInt(Mathf.Pow(_baseBlockMin, levelNumber)), BlockTypes.Keys.Min(), BlockTypes.Keys.Max());
         var maxBlock = Mathf.Clamp(Mathf.RoundToInt(Mathf.Pow(_baseBlockMax, levelNumber)), BlockTypes.Keys.Min(), BlockTypes.Keys.Max());
@@ -100,6 +121,7 @@ public class BlocksController : MonoBehaviour
                         _startPosition.x + _blockWidth * (1 + _blocksInterval) * column,
                        _startPosition.y - _blockHeight * (1 + _blocksInterval) * row,
                         0));
+                _blockCounter++;
             }
         }
     }
@@ -114,31 +136,24 @@ public class BlocksController : MonoBehaviour
 
     private void BlockDestroyed(Block blockType)
     {
+        _blockCounter--;
         Score += _pointsForHit * blockType.HitCount;
-        Events.ScoreChanged_Call(Score);
         if (IsGameWin())
         {
             Events.ShowMenu_Call(MenuType.Win);
+            _levelNumber++;
         }
     }
 
     private bool IsGameWin()
     {
-        if (transform.childCount == 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return _blockCounter == 0;
     }
 
     private void GameOver()
     {
         _levelNumber = 1;
         Score = 0;
-        StopCoroutine(_loweringTimer);
         Events.ShowMenu_Call(MenuType.Defeat);
     }
 
@@ -154,7 +169,22 @@ public class BlocksController : MonoBehaviour
                 yield return new WaitForSeconds(1);
                 timer -= 1;
             }
-            BroadcastMessage("Move", new Vector3(0, -_blockHeight, 0));
+            BroadcastMessage("Move", new Vector3(0, -_blockHeight, 0), SendMessageOptions.DontRequireReceiver);
+        }
+    }
+
+    private void ClearGameState()
+    {
+        _levelNumber = 1;
+        Score = 0;
+        RemoveBlocks();
+    }
+
+    private void StopTimer()
+    {
+        if (_loweringTimer != null)
+        {
+            StopCoroutine(_loweringTimer);
         }
     }
 }

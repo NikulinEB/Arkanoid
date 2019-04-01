@@ -10,6 +10,7 @@ public class ScoreCounter : MonoBehaviour
     private void Start()
     {
         _counter = GetComponent<Text>();
+        UpdateCounter(0);
         Events.ScoreChanged += UpdateCounter;
     }
 
